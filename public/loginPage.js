@@ -3,26 +3,21 @@
 const userForm = new UserForm();
 
 userForm.loginFormCallback = (data) => {
-  const handleLoginResponse = (response) => {
-    if (response === true) { 
+  ApiConnector.login(data, (response) => {
+    if (response && response.success === true) {
       location.reload();
     } else {
-        alert("Пользователь с таким логином или паролем не найден"); 
+      console.error("Ошибка при входе:", response); 
     }
-  };
-
-  ApiConnector.login(data, handleLoginResponse);
+  });
 };
 
-
 userForm.registerFormCallback = (data) => {
-  const handleRegisterResponse = (response) => {
-    if (response === true) { 
+  ApiConnector.register(data, (response) => {
+    if (response && response.success === true) {
       location.reload();
     } else {
-        alert("Невозможно зарегистироваться!"); 
+      console.error("Ошибка при регистрации:", response);
     }
-  };
-
-  ApiConnector.register(data, handleRegisterResponse);
+  });
 };
