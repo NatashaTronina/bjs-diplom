@@ -13,7 +13,7 @@ logoutUser.action = () => {
 };
 
 ApiConnector.current((response) => {
-  if (response && response.success === true) { 
+  if (response && response.success === true && response.data) { 
     ProfileWidget.showProfile(response.data); 
   } else {
     console.error("Ошибка при получении данных текущего пользователя:", response);
@@ -22,4 +22,17 @@ ApiConnector.current((response) => {
 
 const ratesBoard = new RatesBoard();
 
-ratesBoard.clearTable
+function updateTable() {
+    ApiConnector.getStocks((response) =>{
+        if (response && response.success === true && response.data) {
+            ratesBoard.clearTable(); 
+            ratesBoard.fillTable(response.data);
+        } else {
+            console.error("Ошибка при получении данных:", response);
+        }
+    });
+} 
+
+updateTable();
+setInterval(updateTable, 60000);
+
