@@ -1,5 +1,6 @@
 'use strict';
 
+
 const logoutUser = new LogoutButton();
 
 logoutUser.action = () => {
@@ -35,4 +36,39 @@ function updateTable() {
 
 updateTable();
 setInterval(updateTable, 60000);
+
+const moneyManager = new MoneyManager();
+
+moneyManager.addMoneyCallback = (data) => {
+  ApiConnector.addMoney(data, (response) => {
+    if (response && response.success === true && response.data) {
+      ProfileWidget.showProfile(response.data);
+      moneyManager.setMessage(true, "Баланс успешно пополнен");
+    } else {
+      moneyManager.setMessage(false, "Не удалось пополнить баланс");
+    }
+  });
+};
+
+moneyManager.conversionMoneyCallback = (data) => {
+    ApiConnector.convertMoney(data, (response) => {
+        if(response && response.success === true && response.data) {
+            ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(true, "Валюта успешно конвертирована");
+        } else{
+            moneyManager.setMessage(false, "Не удалось конвертировать валюту");
+        }
+    });
+};
+
+moneyManager.sendMoneyCallback = (data) => {
+    ApiConnector.transferMoney(data, (response) => {
+        if(response && response.success === true && response.data) {
+            ProfileWidget.showProfile(response.data);
+            moneyManager.setMessage(true, "Валюта успешно переведена");
+        } else{
+            moneyManager.setMessage(false, "Не удалось перевести валюту");
+        }
+    });
+};
 
