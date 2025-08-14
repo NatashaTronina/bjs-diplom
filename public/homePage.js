@@ -20,3 +20,6 @@ ApiConnector.current((response) => {
   }
 });
 
+const ratesBoard = new RatesBoard();
+
+ratesBoard.clearTable
