@@ -1,6 +1,5 @@
 'use strict';
 
-
 const logoutUser = new LogoutButton();
 
 logoutUser.action = () => {
@@ -72,3 +71,38 @@ moneyManager.sendMoneyCallback = (data) => {
     });
 };
 
+const favoritesWidget = new FavoritesWidget();
+
+ApiConnector.getFavorites((response) => {
+  if (response && response.success === true) { 
+    favoritesWidget.clearTable();
+    favoritesWidget.fillTable(response.data);
+    moneyManager.updateUsersList(response.data);
+  } else {
+    console.error("Ошибка при получении данных текущего пользователя:", response);
+  }
+});
+
+favoritesWidget.addUserCallback = (data) => {
+    ApiConnector.addUserToFavorites(data, (response) => {
+        if (response && response.success === true && response.data) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(response.data);
+            moneyManager.updateUsersList(response.data);
+        } else{
+            favoritesWidget.setMessage(false, "Не удалось добавить пользователя в список избранных")
+        }
+    });
+};
+
+favoritesWidget.removeUserCallback = (data) => {
+    ApiConnector.removeUserFromFavorites(data, (response) => {
+        if (response && response.success === true && response.data) {
+            favoritesWidget.clearTable();
+            favoritesWidget.fillTable(response.data);
+            moneyManager.updateUsersList(response.data);
+        } else{
+            favoritesWidget.setMessage(false, "Не удалось удалить пользователя из списка избранных")
+        }
+    });
+};
