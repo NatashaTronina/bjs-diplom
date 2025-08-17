@@ -7,7 +7,7 @@ logoutUser.action = () => {
         if(response && response.success === true){
             location.reload();
         }else{
-            userForm.setLoginErrorMessage("Не удалось выйти");
+            userForm.setLoginErrorMessage(response.error);
         }
     });
 };
@@ -16,7 +16,7 @@ ApiConnector.current((response) => {
   if (response && response.success === true && response.data) { 
     ProfileWidget.showProfile(response.data); 
   } else {
-    console.error("Ошибка при получении данных текущего пользователя:", response);
+    console.error("Ошибка при получении данных текущего пользователя:", response.error);
   }
 });
 
@@ -28,7 +28,7 @@ function updateTable() {
             ratesBoard.clearTable(); 
             ratesBoard.fillTable(response.data);
         } else {
-            console.error("Ошибка при получении данных:", response);
+            console.error("Ошибка при получении данных:", response.error);
         }
     });
 } 
@@ -42,9 +42,9 @@ moneyManager.addMoneyCallback = (data) => {
   ApiConnector.addMoney(data, (response) => {
     if (response && response.success === true && response.data) {
       ProfileWidget.showProfile(response.data);
-      moneyManager.setMessage(true, "Баланс успешно пополнен");
+      moneyManager.setMessage(true, response.success);
     } else {
-      moneyManager.setMessage(false, "Не удалось пополнить баланс");
+      moneyManager.setMessage(false, response.success);
     }
   });
 };
@@ -53,9 +53,9 @@ moneyManager.conversionMoneyCallback = (data) => {
     ApiConnector.convertMoney(data, (response) => {
         if(response && response.success === true && response.data) {
             ProfileWidget.showProfile(response.data);
-            moneyManager.setMessage(true, "Валюта успешно конвертирована");
+            moneyManager.setMessage(true, response.success);
         } else{
-            moneyManager.setMessage(false, "Не удалось конвертировать валюту");
+            moneyManager.setMessage(false, response.error);
         }
     });
 };
@@ -64,9 +64,9 @@ moneyManager.sendMoneyCallback = (data) => {
     ApiConnector.transferMoney(data, (response) => {
         if(response && response.success === true && response.data) {
             ProfileWidget.showProfile(response.data);
-            moneyManager.setMessage(true, "Валюта успешно переведена");
+            moneyManager.setMessage(true, response.success);
         } else{
-            moneyManager.setMessage(false, "Не удалось перевести валюту");
+            moneyManager.setMessage(false, response.error);
         }
     });
 };
@@ -79,7 +79,7 @@ ApiConnector.getFavorites((response) => {
     favoritesWidget.fillTable(response.data);
     moneyManager.updateUsersList(response.data);
   } else {
-    console.error("Ошибка при получении данных текущего пользователя:", response);
+    console.error("Ошибка при получении данных текущего пользователя:", response.error);
   }
 });
 
@@ -90,7 +90,7 @@ favoritesWidget.addUserCallback = (data) => {
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
         } else{
-            favoritesWidget.setMessage(false, "Не удалось добавить пользователя в список избранных")
+            favoritesWidget.setMessage(false, response.error)
         }
     });
 };
@@ -102,7 +102,7 @@ favoritesWidget.removeUserCallback = (data) => {
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
         } else{
-            favoritesWidget.setMessage(false, "Не удалось удалить пользователя из списка избранных")
+            favoritesWidget.setMessage(false, response.error)
         }
     });
 };
