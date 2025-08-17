@@ -44,7 +44,7 @@ moneyManager.addMoneyCallback = (data) => {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, response.success);
     } else {
-      moneyManager.setMessage(false, response.success);
+      moneyManager.setMessage(false, response.error);
     }
   });
 };
