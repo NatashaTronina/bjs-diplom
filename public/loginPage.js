@@ -7,7 +7,7 @@ userForm.loginFormCallback = (data) => {
     if (response && response.success === true) {
       location.reload();
     } else {
-      userForm.setLoginErrorMessage("Ошибка при входе")
+      userForm.setLoginErrorMessage(response.error)
     }
   });
 };
@@ -17,7 +17,7 @@ userForm.registerFormCallback = (data) => {
     if (response && response.success === true) {
       location.reload();
     } else {
-      userForm.setRegisterErrorMessage("Ошибка при регистрации")
+      userForm.setRegisterErrorMessage(response.error)
     }
   });
 };
